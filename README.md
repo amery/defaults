@@ -1,10 +1,10 @@
 defaults
 ========
 
-[![CircleCI](https://circleci.com/gh/creasty/defaults/tree/master.svg?style=svg)](https://circleci.com/gh/creasty/defaults/tree/master)
-[![codecov](https://codecov.io/gh/creasty/defaults/branch/master/graph/badge.svg)](https://codecov.io/gh/creasty/defaults)
-[![GitHub release](https://img.shields.io/github/release/creasty/defaults.svg)](https://github.com/creasty/defaults/releases)
-[![License](https://img.shields.io/github/license/creasty/defaults.svg)](./LICENSE)
+[![CircleCI](https://circleci.com/gh/amery/defaults/tree/master.svg?style=svg)](https://circleci.com/gh/amery/defaults/tree/master)
+[![codecov](https://codecov.io/gh/amery/defaults/branch/master/graph/badge.svg)](https://codecov.io/gh/amery/defaults)
+[![GitHub release](https://img.shields.io/github/release/amery/defaults.svg)](https://github.com/amery/defaults/releases)
+[![License](https://img.shields.io/github/license/amery/defaults.svg)](./LICENSE)
 
 Initialize structs with default values
 
