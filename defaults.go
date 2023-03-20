@@ -39,6 +39,9 @@ func Set(ptr interface{}) error {
 			}
 		}
 	}
+	if found, err := callSetterWithError(ptr); found {
+		return err
+	}
 	callSetter(ptr)
 	return nil
 }
@@ -161,7 +164,13 @@ func setField(field reflect.Value, defaultVal string) error {
 	case reflect.Ptr:
 		if isInitial || field.Elem().Kind() == reflect.Struct {
 			setField(field.Elem(), defaultVal)
-			callSetter(field.Interface())
+			found, err := callSetterWithError(field.Interface())
+			if !found {
+				callSetter(field.Interface())
+			}
+			if err != nil {
+				return err
+			}
 		}
 	case reflect.Struct:
 		if err := Set(field.Addr().Interface()); err != nil {

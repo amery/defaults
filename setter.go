@@ -10,3 +10,16 @@ func callSetter(v interface{}) {
 		ds.SetDefaults()
 	}
 }
+
+// SetterWithError is another interface for setting default values
+type SetterWithError interface {
+	SetDefaults() error
+}
+
+func callSetterWithError(v interface{}) (bool, error) {
+	if ds, ok := v.(SetterWithError); ok {
+		err := ds.SetDefaults()
+		return true, err
+	}
+	return false, nil
+}
