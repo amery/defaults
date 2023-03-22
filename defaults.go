@@ -36,17 +36,18 @@ func innerSet(ptr interface{}, entry bool) error {
 		return errInvalidType
 	}
 
+	if !entry {
+		found, err := callSetterWithError(ptr)
+		if found {
+			return err
+		}
+	}
+
 	for i := 0; i < t.NumField(); i++ {
 		if defaultVal := t.Field(i).Tag.Get(fieldName); defaultVal != "-" {
 			if err := setField(v.Field(i), defaultVal); err != nil {
 				return err
 			}
-		}
-	}
-	if !entry {
-		found, err := callSetterWithError(ptr)
-		if found {
-			return err
 		}
 	}
 	callSetter(ptr)
@@ -170,11 +171,11 @@ func setField(field reflect.Value, defaultVal string) error {
 	switch field.Kind() {
 	case reflect.Ptr:
 		if isInitial || field.Elem().Kind() == reflect.Struct {
-			setField(field.Elem(), defaultVal)
 			found, err := callSetterWithError(field.Interface())
 			if found {
 				return err
 			}
+			setField(field.Elem(), defaultVal)
 			callSetter(field.Interface())
 		}
 	case reflect.Struct:
