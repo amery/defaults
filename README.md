@@ -6,6 +6,8 @@ defaults
 [![GitHub release](https://img.shields.io/github/release/amery/defaults.svg)](https://github.com/amery/defaults/releases)
 [![License](https://img.shields.io/github/license/amery/defaults.svg)](./LICENSE)
 
+This project is a fork of [github.com/creasty/defaults](https://github.com/creasty/defaults)
+
 Initialize structs with default values
 
 - Supports almost all kind of types
@@ -22,7 +24,8 @@ Initialize structs with default values
   - Pointer types
     - e.g., `*SampleStruct`, `*int`
 - Recursively initializes fields in a struct
-- Dynamically sets default values by [`defaults.Setter`](./setter.go) interface
+- Dynamically sets default values by [`defaults.Setter`](./setter.go)
+  and [`defaults.SetterWithError`](./setter.go) interfaces
 - Preserves non-initial values from being reset with a default value
 
 
