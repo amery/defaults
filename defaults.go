@@ -4,9 +4,12 @@ import (
 	"encoding"
 	"encoding/json"
 	"errors"
+	"log"
 	"reflect"
 	"strconv"
 	"time"
+
+	"github.com/darvaza-proxy/core"
 )
 
 var (
@@ -36,6 +39,11 @@ func innerSet(ptr interface{}, entry bool) error {
 		return errInvalidType
 	}
 
+	log.Printf("%+n(%s.%s{}, %s)%#+n",
+		core.Here(),
+		t.PkgPath(), t.Name(), core.IIf(entry, "true", "false"),
+		core.StackTrace(0))
+
 	if !entry {
 		found, err := callSetterWithError(ptr)
 		if found {
@@ -44,6 +52,7 @@ func innerSet(ptr interface{}, entry bool) error {
 	}
 
 	for i := 0; i < t.NumField(); i++ {
+		log.Printf("%+n: %s.%s.%s", core.Here(), t.PkgPath(), t.Name(), t.Field(i).Name)
 		if defaultVal := t.Field(i).Tag.Get(fieldName); defaultVal != "-" {
 			if err := setField(v.Field(i), defaultVal); err != nil {
 				return err
@@ -72,6 +81,9 @@ func setField(field reflect.Value, defaultVal string) error {
 	}
 
 	isInitial := isInitialValue(field)
+	log.Printf("%+n: %#v default:%q initial:%v", core.Here(),
+		field, defaultVal, isInitial)
+
 	if isInitial {
 		if unmarshalByInterface(field, defaultVal) {
 			return nil
