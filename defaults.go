@@ -43,7 +43,7 @@ func innerSet(ptr interface{}, entry bool) error {
 			}
 		}
 	}
-	if entry {
+	if !entry {
 		found, err := callSetterWithError(ptr)
 		if found {
 			return err
