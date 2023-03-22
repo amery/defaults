@@ -25,6 +25,10 @@ func Set(ptr interface{}) error {
 		return errInvalidType
 	}
 
+	return innerSet(ptr, true)
+}
+
+func innerSet(ptr interface{}, entry bool) error {
 	v := reflect.ValueOf(ptr).Elem()
 	t := v.Type()
 
@@ -39,8 +43,11 @@ func Set(ptr interface{}) error {
 			}
 		}
 	}
-	if found, err := callSetterWithError(ptr); found {
-		return err
+	if entry {
+		found, err := callSetterWithError(ptr)
+		if found {
+			return err
+		}
 	}
 	callSetter(ptr)
 	return nil
@@ -165,15 +172,14 @@ func setField(field reflect.Value, defaultVal string) error {
 		if isInitial || field.Elem().Kind() == reflect.Struct {
 			setField(field.Elem(), defaultVal)
 			found, err := callSetterWithError(field.Interface())
-			if !found {
-				callSetter(field.Interface())
-			}
-			if err != nil {
+			if found {
 				return err
 			}
+			callSetter(field.Interface())
 		}
 	case reflect.Struct:
-		if err := Set(field.Addr().Interface()); err != nil {
+		ptr := field.Addr().Interface()
+		if err := innerSet(ptr, false); err != nil {
 			return err
 		}
 	case reflect.Slice:
